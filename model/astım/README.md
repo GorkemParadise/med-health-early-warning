@@ -143,27 +143,7 @@ result = system.generate_report(patient_data, "Ayşe Hanım")
 - **Takip**: Çok sık (aylık veya daha sık)
 - **İlaçlar**: Yüksek doz inhaler, oral kortikosteroidler, biyolojik ajanlar
 
-## 💊 İlaç Tedavi Seçenekleri
-
-### Kontrol Edici İlaçlar (Uzun Süreli)
-1. **İnhaler Kortikosteroidler**: İltihabı azaltır
-   - Budesonid, Flutikazon, Beklometazon
-   
-2. **Uzun Etkili Beta-2 Agonistler (LABA)**: Hava yollarını açar
-   - Formoterol, Salmeterol
-   
-3. **Leukotriene Antagonistleri**: İltihap azaltıcı
-   - Montelukast
-
-4. **Biyolojik Ajanlar** (Şiddetli astımda):
-   - Omalizumab, Mepolizumab, Benralizumab
-
-### Kurtarıcı İlaçlar (Acil Durumlarda)
-1. **Kısa Etkili Beta-2 Agonistler (SABA)**:
-   - Salbutamol (Ventolin)
-   - Terbutalin
-
-## 🏥 Acil Durum Belirtileri
+## Acil Durum Belirtileri
 
 **HEMEN 112 ARAYIN:**
 - ❌ Dudaklar veya tırnaklar mavileşiyor
@@ -173,22 +153,7 @@ result = system.generate_report(patient_data, "Ayşe Hanım")
 - ❌ Peak flow çok düşük (kırmızı bölge)
 - ❌ Zihinsel karışıklık veya uykululuk
 
-## 📁 Dosya Yapısı
-
-```
-asthma_models/
-├── asthma_m1_rf.pkl           # M1 - Random Forest model
-├── asthma_m2_gb.pkl           # M2 - Gradient Boosting model
-├── asthma_m3_scaler.pkl       # M3 - Standard Scaler
-├── feature_columns.pkl         # Özellik listesi
-├── asthma_dataset.csv         # Tam dataset (2392 hasta)
-└── model_info.json            # Model performans bilgileri
-
-asthma_model_training.py       # Model eğitim scripti
-asthma_assessment.py           # Değerlendirme sistemi
-```
-
-## 🎯 Örnek Senaryolar
+## Örnek Senaryolar
 
 ### Senaryo 1: Sağlıklı Birey ✅
 ```
@@ -228,32 +193,13 @@ FEV1/FVC: 0.62 (Obstrüksiyon!)
 → Sonuç: HEMEN doktor + yoğun tedavi
 ```
 
-## ⚠️ Önemli Notlar
-
-1. **Model Sınırlamaları**:
-   - Dataset dengesiz (%95 sağlıklı, %5 astım)
-   - Gerçek klinik tanı için yeterli değil
-   - Uzman hekim görüşü ZORUNLU
-
-2. **Kullanım Amaçları**:
-   - ✅ Erken tarama
-   - ✅ Risk faktörü belirleme
-   - ✅ Eğitim ve farkındalık
-   - ❌ Kesin tanı koymak
-   - ❌ Tedavi kararı vermek
-
-3. **Güvenlik**:
-   - Hasta verileri gizli tutulmalı
-   - KVKK/HIPAA uyumlu olmalı
-   - Profesyonel kullanım için validasyon gerekli
-
-## 📞 Acil Durumlar
+## Acil Durumlar
 
 - **112**: Acil Sağlık Hizmetleri
 - **En yakın hastane**: Göğüs Hastalıkları
 - **Astım Okulu**: Eğitim programları
 
-## 🔬 İleri Testler
+## İleri Testler
 
 Doktor önerebileceği testler:
 - Spirometri (Akciğer fonksiyon testi)
@@ -263,7 +209,7 @@ Doktor önerebileceği testler:
 - FeNO (Exhaled nitric oxide)
 - Göğüs röntgeni
 
-## 💪 Önerilen Yaşam Tarzı Değişiklikleri
+## Önerilen Yaşam Tarzı Değişiklikleri
 
 1. **Tetikleyicilerden Kaçının**:
    - Sigara dumanı
@@ -290,7 +236,7 @@ Doktor önerebileceği testler:
    - Meditasyon
    - Yeterli uyku
 
-## 📚 Kaynaklar
+## Kaynaklar
 
 - GINA (Global Initiative for Asthma) Kılavuzu
 - Türk Toraks Derneği Astım Tanı ve Tedavi Rehberi
