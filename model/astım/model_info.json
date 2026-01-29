@@ -1,0 +1,97 @@
+{
+  "accuracy": {
+    "m1_rf": 0.9478079331941545,
+    "m2_gb": 0.9457202505219207,
+    "ensemble": 0.9478079331941545
+  },
+  "feature_importance": [
+    {
+      "feature": "DustExposure",
+      "importance": 0.08971914756117963
+    },
+    {
+      "feature": "LungFunctionFVC",
+      "importance": 0.08493552202668811
+    },
+    {
+      "feature": "PollenExposure",
+      "importance": 0.08464395564074287
+    },
+    {
+      "feature": "BMI",
+      "importance": 0.0843606677860548
+    },
+    {
+      "feature": "LungFunctionFEV1",
+      "importance": 0.08351242671407975
+    },
+    {
+      "feature": "PollutionExposure",
+      "importance": 0.07901882861245044
+    },
+    {
+      "feature": "PhysicalActivity",
+      "importance": 0.07754422419345973
+    },
+    {
+      "feature": "SleepQuality",
+      "importance": 0.0752309147285547
+    },
+    {
+      "feature": "Age",
+      "importance": 0.07421998808012413
+    },
+    {
+      "feature": "DietQuality",
+      "importance": 0.07403071273941422
+    },
+    {
+      "feature": "EducationLevel",
+      "importance": 0.025272124969950672
+    },
+    {
+      "feature": "Ethnicity",
+      "importance": 0.022554646490807104
+    },
+    {
+      "feature": "NighttimeSymptoms",
+      "importance": 0.0144683295443964
+    },
+    {
+      "feature": "ExerciseInduced",
+      "importance": 0.0136193400568797
+    },
+    {
+      "feature": "GastroesophagealReflux",
+      "importance": 0.01245886470991263
+    }
+  ],
+  "feature_list": [
+    "Age",
+    "Gender",
+    "Ethnicity",
+    "EducationLevel",
+    "BMI",
+    "Smoking",
+    "PhysicalActivity",
+    "DietQuality",
+    "SleepQuality",
+    "PollutionExposure",
+    "PollenExposure",
+    "DustExposure",
+    "PetAllergy",
+    "FamilyHistoryAsthma",
+    "HistoryOfAllergies",
+    "Eczema",
+    "HayFever",
+    "GastroesophagealReflux",
+    "LungFunctionFEV1",
+    "LungFunctionFVC",
+    "Wheezing",
+    "ShortnessOfBreath",
+    "ChestTightness",
+    "Coughing",
+    "NighttimeSymptoms",
+    "ExerciseInduced"
+  ]
+}
