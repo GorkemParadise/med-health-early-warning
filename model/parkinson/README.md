@@ -1,4 +1,4 @@
-# Parkinson Hastalığı Risk Değerlendirme Sistemi 🏥
+# Parkinson Hastalığı Risk Değerlendirme Sistemi 
 
 ## Genel Bakış
 
