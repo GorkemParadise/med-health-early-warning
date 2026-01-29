@@ -68,11 +68,12 @@
 - **Gece Semptomları**: Evet/Hayır
 - **Egzersizle Tetiklenen**: Evet/Hayır
 
-## 🚀 Hızlı Kullanım
+##  Hızlı Kullanım
 
-### 1. Model Eğitimi (Zaten yapıldı)
+### Yöntem 1: İnteraktif Kullanım (En Kolay)
+
 ```bash
-python asthma_model_training.py
+python main.py
 ```
 
 ### 2. Değerlendirme Sistemi
