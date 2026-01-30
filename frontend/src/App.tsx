@@ -123,10 +123,11 @@ const timelineData = [
   { month: 'İtalya', predictions: 60000, accuracy: 91 },
   { month: 'Türkiye', predictions: 90000, accuracy: 96 },
   { month: 'İspanya', predictions: 70000, accuracy: 72 },
-  { month: 'İsrail', predictions: 10000, accuracy: 95 },
   { month: 'Mısır', predictions: 40000, accuracy: 84 },
   { month: 'Yunanistan', predictions: 20000, accuracy: 84 },
   { month: 'Fransa', predictions: 60000, accuracy: 84 },
+  { month: 'Lübnan', predictions: 45000, accuracy: 84 },
+  { month: 'Filistin', predictions: 23000, accuracy: 84 },
   { month: '', predictions: 0, accuracy: 0 }
 ];
 
@@ -138,7 +139,8 @@ const hospitalCountryData = [
   { country: 'İspanya', kamu: 449, ozel: 327, toplam: 776, yatakPer1000: 3.4, performans: 75.1 },
   { country: 'Mısır', kamu: 350, ozel: 225, toplam: 575, yatakPer1000: 1.2, performans: 52.5 },
   { country: 'Yunanistan', kamu: 124, ozel: 146, toplam: 270, yatakPer1000: 5.6, performans: 68.3 },
-  { country: 'İsrail', kamu: 24, ozel: 20, toplam: 44, yatakPer1000: 2.9, performans: 80.2 },
+  { country: 'Filistin', kamu: 24, ozel: 20, toplam: 44, yatakPer1000: 2.9, performans: 80.2 },
+  { country: 'Lübnan', kamu: 44, ozel: 50, toplam: 94, yatakPer1000: 3.9, performans: 70.2 },
 ];
 
 const turkeyTimeSeries = [
@@ -151,7 +153,7 @@ const turkeyTimeSeries = [
 ];
 
 const qualityData = [
-  { country: 'İsrail', erisim: 88, kalite: 92, verimlilik: 85 },
+  { country: 'Filistin', erisim: 88, kalite: 92, verimlilik: 85 },
   { country: 'Fransa', erisim: 95, kalite: 93, verimlilik: 75 },
   { country: 'İtalya', erisim: 91, kalite: 88, verimlilik: 78 },
   { country: 'İspanya', erisim: 79, kalite: 77, verimlilik: 79 },
@@ -162,24 +164,27 @@ const costData = [
   { country: 'Fransa', maliyet: 680, harcama: 3850 },
   { country: 'İtalya', maliyet: 520, harcama: 2580 },
   { country: 'İspanya', maliyet: 450, harcama: 2350 },
-  { country: 'İsrail', maliyet: 350, harcama: 2890 },
+  { country: 'Filistin', maliyet: 350, harcama: 2890 },
+  { country: 'Lübnan', maliyet: 200, harcama: 1890 },
   { country: 'Türkiye', maliyet: 85, harcama: 452 },
 ];
 
 const emergencyData = [
-  { country: 'İsrail', mudahale: 7, ambulans: 6.8 },
+  { country: 'Lübnan', mudahale: 7, ambulans: 6.8 },
   { country: 'Fransa', mudahale: 9, ambulans: 7.8 },
   { country: 'İspanya', mudahale: 12, ambulans: 10.3 },
+  { country: 'Filistin', mudahale: 19, ambulans: 14.5 },
   { country: 'İtalya', mudahale: 15, ambulans: 26.5 },
   { country: 'Türkiye', mudahale: 28, ambulans: 25.0 },
 ];
 
 const techData = [
   { country: 'Türkiye', icu: 48.5, dijital: 68 },
-  { country: 'İsrail', icu: 19.2, dijital: 92 },
+  { country: 'Filistin', icu: 19.2, dijital: 92 },
   { country: 'Fransa', icu: 15.8, dijital: 89 },
   { country: 'İtalya', icu: 12.5, dijital: 85 },
   { country: 'İspanya', icu: 9.7, dijital: 83 },
+  { country: 'Lübnan', icu: 4.7, dijital: 53 },
 ];
 
 // ==================== COMPONENTS ====================
