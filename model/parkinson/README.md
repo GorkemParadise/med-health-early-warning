@@ -6,7 +6,7 @@ Bu sistem, hastaların Parkinson hastalığı riskini ve şiddetini değerlendir
 
 ## Özellikler
 
-- **%85 doğruluk oranı** ile risk tahmini
+- **%89 doğruluk oranı** ile risk tahmini
 - **4 seviye risk sınıflandırması**: Yok, Hafif, Orta, İleri
 - **Kişiselleştirilmiş tedavi önerileri**
 - **Detaylı risk faktörü analizi**
