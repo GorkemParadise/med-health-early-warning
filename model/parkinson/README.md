@@ -199,16 +199,3 @@ Bu sistem, Parkinson hastalığı ile mücadele eden hastalara ve ailelerine yar
 **Destek Grupları**:
 - Türkiye Parkinson Hastalığı Derneği
 - Nöroloji klinikleri hasta destek programları
-
-## Versiyon Geçmişi
-
-**v1.0.0** (2026-01-30)
-- İlk versiyon
-- Random Forest + Gradient Boosting ensemble
-- 4 seviye risk sınıflandırması
-- Detaylı tedavi önerileri
-- İnteraktif kullanıcı arayüzü
-
----
-
-**⚕️ Sağlığınız bizim için önemli. Lütfen düzenli kontrolleri ihmal etmeyin.**
