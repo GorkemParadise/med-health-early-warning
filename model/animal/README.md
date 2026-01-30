@@ -78,7 +78,7 @@ python assessment.py
 
 5 farklı senaryo için örnek çıktı görüntüler.
 
-## 📋 Veri Alanları
+## Veri Alanları
 
 | Alan | Açıklama | Değer Aralığı |
 |------|----------|---------------|
@@ -125,7 +125,7 @@ python assessment.py
 - **Tedavi:** Antibiyotik (enfeksiyon riski %30-50!)
 - **Kritik:** Derin ısırıklar = Yüksek enfeksiyon
 
-## ⚠️ Önemli Uyarılar
+## Önemli Uyarılar
 
 1. **Bu sistem TIBBİ TANI KOYMAZ!**
 2. Hayvan ısırığı/sokması durumunda MUTLAKA sağlık kuruluşuna başvurun
@@ -133,7 +133,7 @@ python assessment.py
 4. Arı alerjisi olanlar EpiPen bulundurmalı
 5. Kuduz şüphesi varsa 24 saat içinde aşı başlanmalı
 
-## 📞 Acil Numaralar
+## Acil Numaralar
 
 - **112** - Acil Yardım
 - **182** - Zehir Danışma
@@ -141,7 +141,7 @@ python assessment.py
 
 **Not:** Bu sistem epidemiyolojik verilere dayalı risk tahmini yapar ancak klinik değerlendirmenin yerini tutmaz. Her hayvan ısırığı/sokması vakasında profesyonel sağlık hizmeti alınmalıdır.
 
-## 📊 Akdeniz Bölgesi İstatistikleri
+## Akdeniz Bölgesi İstatistikleri
 
 | İstatistik | Değer |
 |------------|-------|
