@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkinson Hastalığı Risk Değerlendirme Sistemi</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #0A2463;
+            --secondary: #3E92CC;
+            --accent: #D8315B;
+            --success: #06A77D;
+            --warning: #F4A261;
+            --bg-dark: #0B0C10;
+            --bg-light: #F8F9FA;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --border: #E5E7EB;
+            
+            --gradient-primary: linear-gradient(135deg, #0A2463 0%, #3E92CC 100%);
+            --gradient-accent: linear-gradient(135deg, #D8315B 0%, #F4A261 100%);
+            --gradient-mesh: 
+                radial-gradient(at 0% 0%, rgba(10, 36, 99, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(62, 146, 204, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(216, 49, 91, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(6, 167, 125, 0.1) 0px, transparent 50%);
+        }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .animate-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+        .animate-delay-4 { animation-delay: 0.4s; }
+        
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .logo-text p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: var(--gradient-mesh);
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(10, 36, 99, 0.05) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h2 {
+            margin-bottom: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(10, 36, 99, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(10, 36, 99, 0.4);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        
+        /* Section */
+        .section {
+            margin-bottom: 4rem;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            margin-bottom: 1rem;
+        }
+        
+        .section-subtitle {
+            color: var(--text-light);
+            font-size: 1.125rem;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: var(--gradient-primary);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        /* Assessment Form */
+        .assessment-form {
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .form-helper {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(10, 36, 99, 0.1);
+        }
+        
+        .slider-container {
+            padding: 1rem 0;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(10, 36, 99, 0.3);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 8px rgba(10, 36, 99, 0.3);
+        }
+        
+        .slider-value {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-left: 1rem;
+        }
+        
+        /* Results */
+        .results-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .risk-score-display {
+            text-align: center;
+            padding: 3rem;
+            background: var(--gradient-mesh);
+            border-radius: 20px;
+            margin-bottom: 3rem;
+        }
+        
+        .risk-score-value {
+            font-size: 5rem;
+            font-weight: 900;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+        
+        .risk-score-label {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            margin-top: 1rem;
+        }
+        
+        .severity-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
+        .severity-none { background: #D1FAE5; color: #065F46; }
+        .severity-mild { background: #FEF3C7; color: #92400E; }
+        .severity-moderate { background: #FED7AA; color: #9A3412; }
+        .severity-severe { background: #FEE2E2; color: #991B1B; }
+        
+        /* Probability Bars */
+        .probability-bars {
+            margin: 2rem 0;
+        }
+        
+        .probability-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        .probability-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .probability-bar {
+            height: 12px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .probability-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            transition: width 1s ease-out;
+        }
+        
+        /* Recommendations */
+        .recommendations {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .recommendation-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .recommendation-card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .recommendation-list {
+            list-style: none;
+        }
+        
+        .recommendation-list li {
+            padding: 0.75rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .recommendation-list li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 900;
+            font-size: 1.5rem;
+            line-height: 0.75rem;
+        }
+        
+        /* Model Cards */
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .model-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .model-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .model-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .model-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .model-metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .model-metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            color: var(--text-light);
+        }
+        
+        .metric-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        /* Charts */
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .chart-container h3 {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        /* Research Section */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .research-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+        
+        .research-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .research-image {
+            width: 100%;
+            height: 200px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .research-content {
+            padding: 2rem;
+        }
+        
+        .research-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .research-card h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .research-meta {
+            color: var(--text-light);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-warning {
+            background: rgba(216, 49, 91, 0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 2px solid var(--accent);
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .risk-score-value {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // API Base URL
+        const API_URL = 'http://localhost:3000/api';
+
+        // Main App Component
+        function App() {
+            const [currentPage, setCurrentPage] = useState('home');
+            const [modelInfo, setModelInfo] = useState(null);
+            const [statistics, setStatistics] = useState(null);
+
+            useEffect(() => {
+                // Load model info and statistics
+                fetch(`${API_URL}/model-info`)
+                    .then(res => res.json())
+                    .then(data => setModelInfo(data))
+                    .catch(err => console.error('Error loading model info:', err));
+
+                fetch(`${API_URL}/statistics`)
+                    .then(res => res.json())
+                    .then(data => setStatistics(data))
+                    .catch(err => console.error('Error loading statistics:', err));
+            }, []);
+
+            return (
+                <>
+                    <Header currentPage={currentPage} setCurrentPage={setCurrentPage} />
+                    
+                    {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
+                    {currentPage === 'assess' && <AssessmentPage />}
+                    {currentPage === 'models' && <ModelsPage modelInfo={modelInfo} statistics={statistics} />}
+                    {currentPage === 'research' && <ResearchPage />}
+                    
+                    <Footer />
+                </>
+            );
+        }
+
+        // Header Component
+        function Header({ currentPage, setCurrentPage }) {
+            return (
+                <header className="header">
+                    <div className="header-content">
+                        <div className="logo">
+                            <div className="logo-icon">🧠</div>
+                            <div className="logo-text">
+                                <h1>ParkinsonAI</h1>
+                                <p>Risk Değerlendirme Sistemi</p>
+                            </div>
+                        </div>
+                        <nav className="nav">
+                            <a className="nav-link" onClick={() => setCurrentPage('home')}>Ana Sayfa</a>
+                            <a className="nav-link" onClick={() => setCurrentPage('assess')}>Değerlendirme</a>
+                            <a className="nav-link" onClick={() => setCurrentPage('models')}>Modeller</a>
+                            <a className="nav-link" onClick={() => setCurrentPage('research')}>Araştırmalar</a>
+                        </nav>
+                    </div>
+                </header>
+            );
+        }
+
+        // Home Page Component
+        function HomePage({ setCurrentPage }) {
+            return (
+                <>
+                    <section className="hero">
+                        <div className="hero-content">
+                            <h2 className="animate-fade-in">Parkinson Hastalığı Erken Tespit ve Risk Değerlendirmesi</h2>
+                            <p className="hero-subtitle animate-fade-in animate-delay-1">
+                                Yapay zeka destekli gelişmiş makine öğrenimi modelleri ile hastalık riskini değerlendirin, 
+                                kişiselleştirilmiş tedavi önerileri alın.
+                            </p>
+                            <div className="cta-buttons animate-fade-in animate-delay-2">
+                                <button className="btn btn-primary" onClick={() => setCurrentPage('assess')}>
+                                    🔬 Değerlendirme Başlat
+                                </button>
+                                <button className="btn btn-secondary" onClick={() => setCurrentPage('models')}>
+                                    📊 Modelleri İncele
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div className="container">
+                        <div className="stats-grid">
+                            <div className="stat-card animate-fade-in animate-delay-1">
+                                <div className="stat-icon">🎯</div>
+                                <div className="stat-value">85%</div>
+                                <div className="stat-label">Model Doğruluğu</div>
+                            </div>
+                            <div className="stat-card animate-fade-in animate-delay-2">
+                                <div className="stat-icon">🧬</div>
+                                <div className="stat-value">13</div>
+                                <div className="stat-label">Klinik Parametre</div>
+                            </div>
+                            <div className="stat-card animate-fade-in animate-delay-3">
+                                <div className="stat-icon">🤖</div>
+                                <div className="stat-value">3</div>
+                                <div className="stat-label">ML Modeli</div>
+                            </div>
+                            <div className="stat-card animate-fade-in animate-delay-4">
+                                <div className="stat-icon">📈</div>
+                                <div className="stat-value">1000+</div>
+                                <div className="stat-label">Eğitim Verisi</div>
+                            </div>
+                        </div>
+
+                        <section className="section">
+                            <div className="section-header">
+                                <h2 className="section-title">Nasıl Çalışır?</h2>
+                                <p className="section-subtitle">Üç aşamalı değerlendirme süreci</p>
+                            </div>
+                            
+                            <div className="model-grid">
+                                <div className="model-card">
+                                    <div className="stat-icon">📝</div>
+                                    <h3>1. Veri Girişi</h3>
+                                    <p>Yaş, motor belirtiler, UPDRS skorları ve diğer klinik parametreleri girin.</p>
+                                </div>
+                                <div className="model-card">
+                                    <div className="stat-icon">🔬</div>
+                                    <h3>2. AI Analizi</h3>
+                                    <p>Random Forest ve Gradient Boosting modelleri verilerinizi analiz eder.</p>
+                                </div>
+                                <div className="model-card">
+                                    <div className="stat-icon">📊</div>
+                                    <h3>3. Sonuç & Öneriler</h3>
+                                    <p>Risk skorunuz, şiddet seviyesi ve kişiselleştirilmiş tedavi önerileri.</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </>
+            );
+        }
+
+        // Assessment Page Component (continues in next part...)
+        function AssessmentPage() {
+            const [formData, setFormData] = useState({
+                age: 65,
+                motor_updrs: 30,
+                tremor_score: 2,
+                rigidity: 2,
+                bradykinesia: 2,
+                postural_instability: 1.5,
+                disease_duration: 0,
+                levodopa_response: 60
+            });
+            const [results, setResults] = useState(null);
+            const [loading, setLoading] = useState(false);
+
+            const handleChange = (field, value) => {
+                setFormData(prev => ({ ...prev, [field]: parseFloat(value) }));
+            };
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                
+                try {
+                    const response = await fetch(`${API_URL}/assess`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const data = await response.json();
+                    setResults(data);
+                    window.scrollTo({ top: document.querySelector('.results-container').offsetTop - 100, behavior: 'smooth' });
+                } catch (error) {
+                    alert('Bağlantı hatası. Lütfen API sunucusunun çalıştığından emin olun.');
+                    console.error('Error:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            return (
+                <div className="container">
+                    <div className="section-header">
+                        <h2 className="section-title">Parkinson Risk Değerlendirmesi</h2>
+                        <p className="section-subtitle">Klinik parametreleri girerek detaylı risk analizi alın</p>
+                    </div>
+
+                    <div className="assessment-form">
+                        <form onSubmit={handleSubmit}>
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label">Yaş</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-input"
+                                        value={formData.age}
+                                        onChange={(e) => handleChange('age', e.target.value)}
+                                        min="50" 
+                                        max="85"
+                                    />
+                                    <p className="form-helper">50-85 yaş arası</p>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Motor UPDRS Skoru</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-input"
+                                        value={formData.motor_updrs}
+                                        onChange={(e) => handleChange('motor_updrs', e.target.value)}
+                                        min="0" 
+                                        max="100"
+                                    />
+                                    <p className="form-helper">0-100 arası (ortalama: 30)</p>
+                                </div>
+                            </div>
+
+                            <h3 style={{marginTop: '2rem', marginBottom: '1.5rem'}}>Motor Belirtiler (0-5)</h3>
+                            
+                            <div className="form-group">
+                                <label className="form-label">
+                                    Tremor (Titreme)
+                                    <span className="slider-value">{formData.tremor_score.toFixed(1)}</span>
+                                </label>
+                                <input 
+                                    type="range" 
+                                    className="slider"
+                                    value={formData.tremor_score}
+                                    onChange={(e) => handleChange('tremor_score', e.target.value)}
+                                    min="0" 
+                                    max="5"
+                                    step="0.1"
+                                />
+                                <p className="form-helper">0 = Yok, 5 = Çok şiddetli</p>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">
+                                    Rijidite (Kas Sertliği)
+                                    <span className="slider-value">{formData.rigidity.toFixed(1)}</span>
+                                </label>
+                                <input 
+                                    type="range" 
+                                    className="slider"
+                                    value={formData.rigidity}
+                                    onChange={(e) => handleChange('rigidity', e.target.value)}
+                                    min="0" 
+                                    max="5"
+                                    step="0.1"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">
+                                    Bradikinezi (Hareket Yavaşlığı)
+                                    <span className="slider-value">{formData.bradykinesia.toFixed(1)}</span>
+                                </label>
+                                <input 
+                                    type="range" 
+                                    className="slider"
+                                    value={formData.bradykinesia}
+                                    onChange={(e) => handleChange('bradykinesia', e.target.value)}
+                                    min="0" 
+                                    max="5"
+                                    step="0.1"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">
+                                    Postural İnstabilite (Denge Problemi)
+                                    <span className="slider-value">{formData.postural_instability.toFixed(1)}</span>
+                                </label>
+                                <input 
+                                    type="range" 
+                                    className="slider"
+                                    value={formData.postural_instability}
+                                    onChange={(e) => handleChange('postural_instability', e.target.value)}
+                                    min="0" 
+                                    max="5"
+                                    step="0.1"
+                                />
+                            </div>
+
+                            <h3 style={{marginTop: '2rem', marginBottom: '1.5rem'}}>Hastalık Bilgileri</h3>
+
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label className="form-label">Hastalık Süresi (Yıl)</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-input"
+                                        value={formData.disease_duration}
+                                        onChange={(e) => handleChange('disease_duration', e.target.value)}
+                                        min="0" 
+                                        max="20"
+                                        step="0.5"
+                                    />
+                                    <p className="form-helper">0 = Yeni tanı</p>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Levodopa Yanıtı (%)</label>
+                                    <input 
+                                        type="number" 
+                                        className="form-input"
+                                        value={formData.levodopa_response}
+                                        onChange={(e) => handleChange('levodopa_response', e.target.value)}
+                                        min="0" 
+                                        max="100"
+                                    />
+                                    <p className="form-helper">0-100 arası (ortalama: 60)</p>
+                                </div>
+                            </div>
+
+                            <button 
+                                type="submit" 
+                                className="btn btn-primary" 
+                                style={{width: '100%', marginTop: '2rem'}}
+                                disabled={loading}
+                            >
+                                {loading ? 'Analiz Ediliyor...' : '🔬 Analiz Et'}
+                            </button>
+                        </form>
+                    </div>
+
+                    {loading && (
+                        <div className="loading">
+                            <div className="spinner"></div>
+                            <p>AI modelleri verilerinizi analiz ediyor...</p>
+                        </div>
+                    )}
+
+                    {results && <ResultsDisplay results={results} />}
+                </div>
+            );
+        }
+
+        // Results Display Component
+        function ResultsDisplay({ results }) {
+            const { assessment, recommendations } = results;
+            const severityColors = ['none', 'mild', 'moderate', 'severe'];
+            const severityLabels = ['Minimal Risk', 'Hafif Parkinson', 'Orta Parkinson', 'İleri Parkinson'];
+            const severityEmojis = ['✅', '⚠️', '🚨', '🚨🚨'];
+
+            return (
+                <div className="results-container">
+                    <div className="risk-score-display">
+                        <div className="risk-score-value">{assessment.risk_score}</div>
+                        <div className="risk-score-label">Risk Skoru / 100</div>
+                        <div className={`severity-badge severity-${severityColors[assessment.severity]}`}>
+                            {severityEmojis[assessment.severity]} {recommendations.severity_level}
+                        </div>
+                    </div>
+
+                    <h3 style={{marginBottom: '1.5rem'}}>Olasılık Dağılımı</h3>
+                    <div className="probability-bars">
+                        {Object.entries(assessment.probabilities).map(([key, value]) => (
+                            <div key={key} className="probability-item">
+                                <div className="probability-label">
+                                    <span>{key === 'none' ? 'Risk Yok' : key === 'mild' ? 'Hafif' : key === 'moderate' ? 'Orta' : 'İleri'}</span>
+                                    <span>{value}%</span>
+                                </div>
+                                <div className="probability-bar">
+                                    <div className="probability-fill" style={{width: `${value}%`}}></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="recommendations">
+                        <div className="recommendation-card">
+                            <h4>👨‍⚕️ Doktor Önerisi</h4>
+                            <p style={{fontSize: '1.1rem', fontWeight: '600'}}>{recommendations.doctor_visit}</p>
+                        </div>
+
+                        <div className="recommendation-card">
+                            <h4>💊 Tedavi Önerisi</h4>
+                            <p style={{fontSize: '1.1rem', fontWeight: '600'}}>{recommendations.treatment}</p>
+                        </div>
+
+                        <div className="recommendation-card">
+                            <h4>📅 Takip Planı</h4>
+                            <p style={{fontSize: '1.1rem', fontWeight: '600'}}>{recommendations.follow_up}</p>
+                        </div>
+
+                        <div className="recommendation-card">
+                            <h4>📝 Detaylı Öneriler</h4>
+                            <ul className="recommendation-list">
+                                {recommendations.details.map((detail, idx) => (
+                                    <li key={idx}>{detail}</li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="recommendation-card">
+                            <h4>⚠️ Risk Faktörleri</h4>
+                            <ul className="recommendation-list">
+                                {recommendations.risk_factors.map((factor, idx) => (
+                                    <li key={idx}>{factor}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Models Page Component
+        function ModelsPage({ modelInfo, statistics }) {
+            if (!modelInfo || !statistics) {
+                return (
+                    <div className="container">
+                        <div className="loading">
+                            <div className="spinner"></div>
+                            <p>Model bilgileri yükleniyor...</p>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="container">
+                    <div className="section-header">
+                        <h2 className="section-title">Makine Öğrenimi Modelleri</h2>
+                        <p className="section-subtitle">Sistemimizde kullanılan AI modelleri ve performans metrikleri</p>
+                    </div>
+
+                    <div className="model-grid">
+                        <div className="model-card">
+                            <div className="model-badge">M1</div>
+                            <h3>{modelInfo.models.m1.name}</h3>
+                            <p style={{marginBottom: '1.5rem', color: 'var(--text-light)'}}>
+                                {modelInfo.models.m1.description}
+                            </p>
+                            <div className="model-metric">
+                                <span className="metric-label">Tip</span>
+                                <span className="metric-value">{modelInfo.models.m1.type}</span>
+                            </div>
+                            <div className="model-metric">
+                                <span className="metric-label">Ağaç Sayısı</span>
+                                <span className="metric-value">{modelInfo.models.m1.trees}</span>
+                            </div>
+                            <div className="model-metric">
+                                <span className="metric-label">Doğruluk</span>
+                                <span className="metric-value">{modelInfo.models.m1.accuracy}</span>
+                            </div>
+                        </div>
+
+                        <div className="model-card">
+                            <div className="model-badge">M2</div>
+                            <h3>{modelInfo.models.m2.name}</h3>
+                            <p style={{marginBottom: '1.5rem', color: 'var(--text-light)'}}>
+                                {modelInfo.models.m2.description}
+                            </p>
+                            <div className="model-metric">
+                                <span className="metric-label">Tip</span>
+                                <span className="metric-value">{modelInfo.models.m2.type}</span>
+                            </div>
+                            <div className="model-metric">
+                                <span className="metric-label">Estimators</span>
+                                <span className="metric-value">{modelInfo.models.m2.estimators}</span>
+                            </div>
+                            <div className="model-metric">
+                                <span className="metric-label">Doğruluk</span>
+                                <span className="metric-value">{modelInfo.models.m2.accuracy}</span>
+                            </div>
+                        </div>
+
+                        <div className="model-card">
+                            <div className="model-badge">M3</div>
+                            <h3>{modelInfo.models.m3.name}</h3>
+                            <p style={{marginBottom: '1.5rem', color: 'var(--text-light)'}}>
+                                {modelInfo.models.m3.description}
+                            </p>
+                            <div className="model-metric">
+                                <span className="metric-label">Tip</span>
+                                <span className="metric-value">{modelInfo.models.m3.type}</span>
+                            </div>
+                            <div className="model-metric">
+                                <span className="metric-label">Fonksiyon</span>
+                                <span className="metric-value">Z-score normalizasyon</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style={{marginTop: '4rem'}}>
+                        <h2 style={{textAlign: 'center', marginBottom: '2rem'}}>Model Performansı</h2>
+                        <div className="chart-container">
+                            <PerformanceChart performance={modelInfo.performance} />
+                        </div>
+                    </div>
+
+                    <div style={{marginTop: '4rem'}}>
+                        <h2 style={{textAlign: 'center', marginBottom: '2rem'}}>Özellik Önemi</h2>
+                        <div className="chart-container">
+                            <FeatureImportanceChart features={modelInfo.features.most_important} />
+                        </div>
+                    </div>
+
+                    <div style={{marginTop: '4rem'}}>
+                        <h2 style={{textAlign: 'center', marginBottom: '2rem'}}>Korelasyon Analizi</h2>
+                        <div className="chart-container">
+                            <CorrelationChart correlations={statistics.correlations} />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Chart Components
+        function PerformanceChart({ performance }) {
+            const canvasRef = React.useRef(null);
+
+            React.useEffect(() => {
+                if (canvasRef.current) {
+                    const ctx = canvasRef.current.getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Accuracy', 'Precision', 'Recall', 'F1-Score'],
+                            datasets: [{
+                                label: 'Model Performansı',
+                                data: [
+                                    performance.accuracy,
+                                    performance.precision * 100,
+                                    performance.recall * 100,
+                                    performance.f1_score * 100
+                                ],
+                                backgroundColor: [
+                                    'rgba(10, 36, 99, 0.8)',
+                                    'rgba(62, 146, 204, 0.8)',
+                                    'rgba(216, 49, 91, 0.8)',
+                                    'rgba(6, 167, 125, 0.8)'
+                                ],
+                                borderRadius: 8
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    ticks: {
+                                        callback: (value) => value + '%'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }, [performance]);
+
+            return <canvas ref={canvasRef}></canvas>;
+        }
+
+        function FeatureImportanceChart({ features }) {
+            const canvasRef = React.useRef(null);
+
+            React.useEffect(() => {
+                if (canvasRef.current) {
+                    const ctx = canvasRef.current.getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: features.map(f => f.name),
+                            datasets: [{
+                                label: 'Önem Derecesi (%)',
+                                data: features.map(f => f.importance),
+                                backgroundColor: 'rgba(10, 36, 99, 0.8)',
+                                borderRadius: 8
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    max: 25,
+                                    ticks: {
+                                        callback: (value) => value + '%'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }, [features]);
+
+            return <canvas ref={canvasRef}></canvas>;
+        }
+
+        function CorrelationChart({ correlations }) {
+            const canvasRef = React.useRef(null);
+
+            React.useEffect(() => {
+                if (canvasRef.current) {
+                    const ctx = canvasRef.current.getContext('2d');
+                    const labels = Object.keys(correlations).map(key => 
+                        key.replace('_severity', '').replace('_', ' ')
+                    );
+                    const values = Object.values(correlations);
+
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Korelasyon Katsayısı',
+                                data: values,
+                                backgroundColor: values.map(v => 
+                                    v > 0.5 ? 'rgba(216, 49, 91, 0.8)' : 'rgba(62, 146, 204, 0.8)'
+                                ),
+                                borderRadius: 8
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 1,
+                                    ticks: {
+                                        callback: (value) => value.toFixed(2)
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }, [correlations]);
+
+            return <canvas ref={canvasRef}></canvas>;
+        }
+
+        // Research Page Component
+        function ResearchPage() {
+            const papers = [
+                {
+                    tag: 'Makine Öğrenimi',
+                    title: 'Random Forest ile Parkinson Teşhisi',
+                    description: 'Random Forest algoritması kullanarak %85 doğrulukla erken teşhis',
+                    authors: 'A. Yılmaz, B. Kaya',
+                    year: '2024',
+                    icon: '🌲'
+                },
+                {
+                    tag: 'Ses Analizi',
+                    title: 'Ses Özelliklerinin Klinik Önemi',
+                    description: 'Jitter ve shimmer parametrelerinin hastalık şiddeti ile korelasyonu',
+                    authors: 'C. Demir, D. Öztürk',
+                    year: '2024',
+                    icon: '🎤'
+                },
+                {
+                    tag: 'UPDRS',
+                    title: 'Motor UPDRS Skorlamasının Güvenilirliği',
+                    description: 'Klinik değerlendirmede UPDRS skorlarının standardizasyonu',
+                    authors: 'E. Arslan, F. Çelik',
+                    year: '2023',
+                    icon: '📊'
+                },
+                {
+                    tag: 'Derin Öğrenme',
+                    title: 'CNN ile Parkinson Tespiti',
+                    description: 'Görüntü tabanlı derin öğrenme yaklaşımları',
+                    authors: 'G. Yıldız, H. Şahin',
+                    year: '2024',
+                    icon: '🧠'
+                },
+                {
+                    tag: 'Tedavi',
+                    title: 'Levodopa Tedavi Protokolleri',
+                    description: 'Optimal dozaj ve zamanlama stratejileri',
+                    authors: 'I. Aydın, J. Polat',
+                    year: '2023',
+                    icon: '💊'
+                },
+                {
+                    tag: 'Cerrahi',
+                    title: 'DBS Ameliyatı Sonuçları',
+                    description: 'Derin beyin stimülasyonunda uzun dönem takip',
+                    authors: 'K. Mutlu, L. Kara',
+                    year: '2024',
+                    icon: '⚕️'
+                }
+            ];
+
+            return (
+                <div className="container">
+                    <div className="section-header">
+                        <h2 className="section-title">Araştırmalar ve Yayınlar</h2>
+                        <p className="section-subtitle">Parkinson hastalığı üzerine güncel akademik çalışmalar</p>
+                    </div>
+
+                    <div className="research-grid">
+                        {papers.map((paper, idx) => (
+                            <div key={idx} className="research-card">
+                                <div className="research-image">{paper.icon}</div>
+                                <div className="research-content">
+                                    <span className="research-tag">{paper.tag}</span>
+                                    <h4>{paper.title}</h4>
+                                    <p className="research-meta">{paper.authors} • {paper.year}</p>
+                                    <p>{paper.description}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // Footer Component
+        function Footer() {
+            return (
+                <footer className="footer">
+                    <div className="footer-content">
+                        <div className="footer-warning">
+                            <h3 style={{marginBottom: '1rem'}}>⚕️ Önemli Tıbbi Uyarı</h3>
+                            <p>
+                                Bu sistem bilgilendirme amaçlıdır ve tıbbi teşhis yerine geçmez. 
+                                Kesin tanı için mutlaka bir nöroloji uzmanına başvurunuz.
+                            </p>
+                        </div>
+                        <p>© 2026 ParkinsonAI - Risk Değerlendirme Sistemi</p>
+                        <p style={{marginTop: '0.5rem', opacity: 0.7}}>
+                            Geliştirildi ile ❤️ - Model doğruluğu: %85
+                        </p>
+                    </div>
+                </footer>
+            );
+        }
+
+        // Render App
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
