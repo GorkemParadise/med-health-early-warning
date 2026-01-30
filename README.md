@@ -26,7 +26,6 @@ kaynakların daha iyi koordinasyonunu ve önceliklendirilmesini sağlamayı ve L
 
 - **5 AI Modeli**: Astım, Diyabet, Hipertansiyon, Parkinson, Hayvan Isırığı
 - **%90+ Doğruluk**: Ensemble learning (Random Forest + Gradient Boosting)
-- **Modern UI**: Glassmorphism tasarım, interaktif grafikler
 - **Real-time**: Anında risk değerlendirme
 - **Responsive**: Mobil uyumlu tasarım
 
