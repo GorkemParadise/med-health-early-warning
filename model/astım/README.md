@@ -7,13 +7,6 @@
 - M2 (Gradient Boosting): %94.6  
 - Ensemble: %94.8
 
-## Dataset Bilgileri
-
-- **Toplam Hasta**: 2,392
-- **Özellik Sayısı**: 26
-- **Astım Vakaları**: 124 (%5.2)
-- **Sağlıklı Bireyler**: 2,268 (%94.8)
-
 ## Önemli Risk Faktörleri
 
 1. **Toz Maruziyeti** (8.82%)
@@ -27,7 +20,7 @@
 9. **Diyet Kalitesi** (7.48%)
 10. **Yaş** (7.44%)
 
-## 🎯 Değerlendirme Parametreleri
+## Değerlendirme Parametreleri
 
 ### Demografik Bilgiler
 - **Yaş**: Tüm yaş grupları
