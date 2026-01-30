@@ -115,7 +115,7 @@ med-health-early-warning/
 │   ├── main.py              # FastAPI uygulaması
 │   ├── requirements.txt     # Python bağımlılıkları
 │
-├──│models/                  # Eğitilmiş ML modelleri
+├── models/                  # Eğitilmiş ML modelleri
 │   ├── animal/
 │   ├── astım/
 │   ├── city/
